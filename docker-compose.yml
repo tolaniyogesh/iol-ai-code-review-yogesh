@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  ai-code-reviewer:
+    build: .
+    container_name: ai-code-reviewer
+    env_file:
+      - .env
+    volumes:
+      - ./src:/app/src
+      - ./.ai-review.yaml:/app/.ai-review.yaml
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: python -m src.main

@@ -1,0 +1,59 @@
+version: "1.0"
+
+enabled: true
+
+ignore_patterns:
+  - "*.md"
+  - "*.txt"
+  - "*.json"
+  - "*.yaml"
+  - "*.yml"
+  - "tests/**"
+  - "docs/**"
+  - "*.lock"
+  - "package-lock.json"
+  - "yarn.lock"
+
+focus_areas:
+  code_quality: true
+  security: true
+  performance: true
+  best_practices: true
+  documentation: true
+
+severity_config:
+  block_pr_on_critical: false
+  block_pr_on_warning: false
+  min_severity_to_comment: "suggestion"
+
+review_settings:
+  max_comments_per_file: 10
+  max_total_comments: 50
+  avoid_obvious_comments: true
+  suggest_fixes: true
+  include_line_numbers: true
+
+custom_rules:
+  - name: "No hardcoded credentials"
+    pattern: "(password|api_key|secret|token)\\s*=\\s*['\"][^'\"]+['\"]"
+    severity: "critical"
+    message: "Hardcoded credentials detected. Use environment variables instead."
+  
+  - name: "Avoid print statements in production"
+    pattern: "print\\("
+    severity: "warning"
+    message: "Use proper logging instead of print statements."
+
+language_specific:
+  python:
+    max_function_length: 50
+    max_complexity: 10
+    require_docstrings: true
+  
+  javascript:
+    prefer_const: true
+    no_var: true
+  
+  java:
+    max_method_length: 50
+    require_javadoc: true
