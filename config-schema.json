@@ -1,0 +1,156 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AI Code Review Configuration",
+  "description": "Configuration schema for AI Code Review Assistant",
+  "type": "object",
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Configuration version",
+      "default": "1.0"
+    },
+    "enabled": {
+      "type": "boolean",
+      "description": "Enable or disable code review",
+      "default": true
+    },
+    "ignore_patterns": {
+      "type": "array",
+      "description": "Glob patterns for files to ignore",
+      "items": {
+        "type": "string"
+      },
+      "default": ["*.md", "*.txt", "*.json"]
+    },
+    "focus_areas": {
+      "type": "object",
+      "description": "Areas to focus on during review",
+      "properties": {
+        "code_quality": {
+          "type": "boolean",
+          "default": true
+        },
+        "security": {
+          "type": "boolean",
+          "default": true
+        },
+        "performance": {
+          "type": "boolean",
+          "default": true
+        },
+        "best_practices": {
+          "type": "boolean",
+          "default": true
+        },
+        "documentation": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "severity_config": {
+      "type": "object",
+      "description": "Severity-based configuration",
+      "properties": {
+        "block_pr_on_critical": {
+          "type": "boolean",
+          "description": "Block PR if critical issues found",
+          "default": false
+        },
+        "block_pr_on_warning": {
+          "type": "boolean",
+          "description": "Block PR if warnings found",
+          "default": false
+        },
+        "min_severity_to_comment": {
+          "type": "string",
+          "enum": ["critical", "warning", "suggestion"],
+          "description": "Minimum severity level to post comments",
+          "default": "suggestion"
+        }
+      }
+    },
+    "review_settings": {
+      "type": "object",
+      "description": "Review behavior settings",
+      "properties": {
+        "max_comments_per_file": {
+          "type": "integer",
+          "description": "Maximum comments per file",
+          "default": 10,
+          "minimum": 1
+        },
+        "max_total_comments": {
+          "type": "integer",
+          "description": "Maximum total comments per PR",
+          "default": 50,
+          "minimum": 1
+        },
+        "avoid_obvious_comments": {
+          "type": "boolean",
+          "description": "Skip obvious or trivial comments",
+          "default": true
+        },
+        "suggest_fixes": {
+          "type": "boolean",
+          "description": "Include suggested fixes in comments",
+          "default": true
+        },
+        "include_line_numbers": {
+          "type": "boolean",
+          "description": "Include line numbers in comments",
+          "default": true
+        }
+      }
+    },
+    "custom_rules": {
+      "type": "array",
+      "description": "Custom pattern-based rules",
+      "items": {
+        "type": "object",
+        "required": ["name", "pattern", "severity", "message"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Rule name"
+          },
+          "pattern": {
+            "type": "string",
+            "description": "Regex pattern to match"
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["critical", "warning", "suggestion"],
+            "description": "Issue severity"
+          },
+          "message": {
+            "type": "string",
+            "description": "Message to display"
+          }
+        }
+      }
+    },
+    "language_specific": {
+      "type": "object",
+      "description": "Language-specific configurations",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "max_function_length": {
+            "type": "integer",
+            "description": "Maximum function length in lines"
+          },
+          "max_complexity": {
+            "type": "integer",
+            "description": "Maximum cyclomatic complexity"
+          },
+          "require_docstrings": {
+            "type": "boolean",
+            "description": "Require docstrings for functions"
+          }
+        }
+      }
+    }
+  },
+  "required": ["version"]
+}
